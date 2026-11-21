@@ -1,51 +1,61 @@
 # Lab 13 · Nhiệm vụ D · Kế hoạch pilot trợ lý hoàn phí LogiX-VN (Gate 2a)
-# Điền mọi chỗ có dấu hỏi. Khi nộp, ngoài các dòng chú thích không còn dấu hỏi nào.
 # Kiểm tra đọc được: python -c "import yaml; yaml.safe_load(open('../report/team/pilot_plan.yaml'))"
 #
-# D1 · Cỡ mẫu (baseline 0,70; mục tiêu +5 điểm; alpha 0,05; power 0,8; ICC 0,02)
-#   a) Chia theo yêu cầu:
-#   b) Theo nhân viên, m = 75:
-#   c) 20 nhân viên mỗi nhóm:
-#   d) 6 depot mỗi nhóm:
-#   e) Mức chênh 6 điểm (859 mỗi nhóm), 20 nhân viên mỗi nhóm:
+# D1 · Cỡ mẫu (baseline 0,70; alpha 0,05; power 0,8; ICC 0,02)
+#   a) Chia theo yêu cầu (MDE 5 điểm, p2=0,75): 1.251 yêu cầu hiệu dụng/nhóm (xấp xỉ hai tỉ lệ; Cohen's h = 1.250).
+#   b) Theo nhân viên, m = 75 (MDE 5 điểm): DEFF = 1 + (75 - 1) * 0,02 = 2,48 -> cần 1.251 * 2,48 = 3.103 yêu cầu thô/nhóm (~42 nhân viên/nhóm; công ty chỉ có 40 nhân viên nên KHÔNG ĐỦ).
+#   c) 20 nhân viên mỗi nhóm (m = 75): n_eff = 20 * 75 / 2,48 = 604,84 (~605 mẫu hiệu dụng/nhóm). Giới hạn tiệm cận c / ICC = 20 / 0,02 = 1.000 < 1.251 nên MDE 5 điểm KHÔNG THỂ ĐẠT dù tăng số yêu cầu mỗi nhân viên.
+#   d) 6 depot mỗi nhóm: trần tiệm cận c / ICC = 6 / 0,02 = 300 mẫu hiệu dụng/nhóm (< 1.251, loại).
+#   e) Đánh đổi MDE 6 điểm (p2=0,76 -> 859 mẫu hiệu dụng/nhóm), 20 nhân viên/nhóm: cần m = 299 yêu cầu/nhân viên -> 5.980 yêu cầu thô/nhóm, DEFF = 6,96, n_eff = 859,20 >= 859. Hạn chế: nếu tác động thật chỉ là +5 điểm, power giảm còn ~0,64 (64%).
 #
-# D2 · Năm câu kiểm tra "tách được tác động" với cách chia đã chọn (mỗi câu một dòng):
-#   1. Đối chứng chạy cùng thời gian:
-#   2. Chia ngẫu nhiên hay do người chọn:
-#   3. Ảnh hưởng gián tiếp và cách giảm:
-#   4. Chỉ số chính, ngưỡng, ngày quyết định đã viết trước:
-#   5. Ít nhất 20 cụm mỗi nhóm:
+# D2 · Phân tích "tách được tác động" (Identifiability) với cách chia theo nhân viên (20 can thiệp vs 20 đối chứng):
+#   1. Đối chứng chạy cùng thời gian: Có — 20 nhân viên đối chứng và 20 nhân viên can thiệp chạy đồng thời để loại trừ nhiễu mùa vụ và biến động lưu lượng.
+#   2. Ngẫu nhiên hóa và phân tầng: Có — bốc thăm ngẫu nhiên bằng seed cố định trước khi chạy, phân tầng (stratified) theo 12 depot để cân bằng đặc thù từng kho.
+#   3. Spillover và cách ngăn control nhìn thấy gợi ý AI: Có nguy cơ spillover khi nhân viên cùng depot trao đổi câu trả lời; giảm bằng khóa quyền hiển thị gợi ý trợ lý theo staff_id trên giao diện CSKH (control chỉ thấy quy trình thủ công) và log lượt mở theo staff_id.
+#   4. Thành phần nhân sự & chọn lọc: Giữ nguyên danh sách 40 nhân viên đã phân nhóm trong suốt pilot (không điều chuyển giữa 2 nhóm để tránh selection bias/contamination); nếu nghỉ việc thì ghi nhận theo intention-to-treat.
+#   5. Viết trước (predeclare): Chỉ số chính, MDE (0,06), 3 luật dừng và ngày quyết định được khóa trước ngày bắt đầu pilot.
+#   6. Tối thiểu 20 cụm mỗi nhóm: Đạt — đúng 20 nhân viên/nhóm (depot chỉ có 6 cụm/nhóm).
+#   7. Hạn chế còn lại: Không loại được hoàn toàn giao tiếp miệng giữa nhân viên cùng depot; đánh đổi MDE 6 điểm làm power chỉ đạt ~0,64 nếu hiệu ứng thật là +5 điểm.
 #
-# Đánh đổi đã chấp nhận (nếu cách chia chưa đạt cả hai điều kiện):
-#
-# Tỉ lệ mo_lai_trong_7_ngay hiện tại và ngưỡng an toàn đã chọn:
+# D3 · Tỉ lệ mở lại trong 7 ngày trên dữ liệu mô phỏng (baseline an toàn):
+#   - Toàn mẫu (1.200 yêu cầu): 51 / 1.200 = 4,25% [simulated_data].
+#   - Trong phạm vi noi_dia + hang_nang (982 yêu cầu): 39 / 982 = 3,97% [simulated_data].
 
 pilot:
-  owner: "?"                      # một người có tên vai trò, không ghi "cả đội"
-  scope: "?"                      # loại yêu cầu nào, depot nào; dựa vào kết quả A3
+  owner: "Giám đốc vận hành LogiX-VN"
+  scope: "Chỉ noi_dia (2.696 đ = 0,22x [simulated]) và hang_nang (8.221 đ = 0,69x [simulated]) trên toàn bộ 12 depot (chia theo 40 nhân viên CSKH); loại quoc_te (22.515 đ = 1,88x [simulated], tỉ lệ TC 27,3%) và tạm tách doi_tac (10.215 đ = 0,85x [simulated]); giới hạn chạy lại tối đa k=2 lần (chi phí cả hệ thống thấp nhất theo B3: 6.901.220 đ [simulated])"
   assignment:
-    unit: "?"                     # request | staff | depot
+    unit: "staff"
     control_share: 0.5
     randomized: true
-  rollout: [0.10, 0.25, 0.50]     # mỗi bước một tuần
+    stratification: "Phân tầng theo 12 depot bằng seed cố định công bố trước; khóa danh sách 20 nhân viên can thiệp và 20 nhân viên đối chứng trong suốt pilot"
+  rollout: [0.10, 0.25, 0.50]     # Tỉ lệ tổng 40 nhân viên vào nhóm can thiệp theo tuần (4 -> 10 -> 20 nhân viên). Nhóm đối chứng giữ cố định 20 nhân viên (control_share: 0.5) chạy song song từ tuần 1, không lấy từ 16/10 nhân viên can thiệp chưa kích hoạt. Chỉ tính primary metric chính thức khi đạt bước 0.50 (20 vs 20) và đủ 7 ngày theo dõi (tránh right censoring).
   primary_metric:
     name: dong_trong_24h_khong_mo_lai_7_ngay
-    baseline: 0.70
-    mde: 0.05
+    baseline: 0.70                # Thông số baseline đề bài cho D1 (không thay bằng 82,83% từ CSV mô phỏng)
+    mde: 0.06                     # Đánh đổi độ nhạy thống kê (power ~0,64 nếu tác động thật +5 điểm) do trần c/ICC=1.000 < 1.251
     alpha: 0.05
     power: 0.80
-    n_per_arm: "?"
-    design_effect: "?"            # 1 nếu chia theo yêu cầu
-    clusters_per_arm: "?"         # để trống nếu chia theo yêu cầu
+    n_per_arm: 859                # Số mẫu hiệu dụng cần thiết mỗi nhóm tại MDE 6 điểm
+    design_effect: 6.96           # DEFF = 1 + (299 - 1) * 0,02 với m = 299 yêu cầu/nhân viên (5.980 yêu cầu thô/nhóm)
+    clusters_per_arm: 20          # 20 nhân viên mỗi nhóm
   identifiability:
-    concurrent_control: "?"
-    spillover_risk: "?"
-    predeclared: "?"
+    concurrent_control: "Có — 20 nhân viên đối chứng chạy đồng thời cùng kỳ và cùng 12 depot với nhóm can thiệp"
+    spillover_risk: "Trung bình (nhân viên cùng depot có thể trao đổi miệng); ngăn nhóm đối chứng thấy gợi ý AI bằng phân quyền tài khoản staff_id trên giao diện CSKH và theo dõi log truy cập; vẫn còn hạn chế trao đổi trực tiếp ngoài hệ thống"
+    staff_stability_and_bias: "Khóa danh sách nhân sự 2 nhóm trước khi chạy, phân tích theo phân nhóm ban đầu (intention-to-treat) để tránh selection bias và contamination"
+    predeclared: "Chỉ số chính, MDE 0,06, 3 luật dừng và ngày quyết định 2027-01-05 (giả định lịch chạy thử 4 tuần + 7 ngày quan sát reopen, cần nhóm xác nhận) được khóa trước khi khởi chạy"
   stop_rules:
-    - "NẾU ? TRONG ? THÌ ? KHÔNG THÌ ?"
-    - "NẾU ? TRONG ? THÌ ? KHÔNG THÌ ?"
-    - "NẾU ? TRONG ? THÌ ? KHÔNG THÌ ?"
-  interim_looks: "chỉ kiểm tra chỉ số an toàn"
-  rollback: "?"                   # ai bấm, mất bao lâu, khách được phục vụ bằng gì
-  decision_date: "?"
-  simulated_inputs: ["?"]         # liệt kê mọi con số giả lập đã dùng
+    - "NẾU tỉ lệ mo_lai_trong_7_ngay (chỉ tính ca đủ 7 ngày quan sát) của nhóm can thiệp cao hơn nhóm đối chứng >= 2,0 điểm phần trăm hoặc vượt trần tuyệt đối 6,0% (so với mức nền 3,97% trong phạm vi noi_dia + hang_nang), hoặc phát sinh >= 1 ca hoàn tiền trùng lặp TRONG 3 ngày liên tiếp THÌ Giám đốc vận hành LogiX-VN kích hoạt rollback tắt trợ lý trong 30 phút và chuyển No-go KHÔNG THÌ không được tiếp tục chạy hoặc sang bước rollout tiếp theo"
+    - "NẾU chi phí mỗi việc thành công đo thực tế > 8.000 đ (giữ biên an toàn dưới mức tự làm 12.000 đ và tránh vùng rủi ro xem lại 100% là 11.743–12.415 đ [simulated] ở B4) hoặc tỉ lệ xem lại > 60% kéo dài TRONG 7 ngày liên tiếp THÌ PM trợ lý hoàn phí thu hẹp phạm vi về chỉ noi_dia và giữ giới hạn k=2 lần chạy KHÔNG THÌ không được mở rộng rollout hoặc giữ loại hang_nang"
+    - "NẾU tỉ lệ gợi ý không được chấp nhận nguyên trạng (sua + bo trên số được xem lại) > 40,0% (so với mức mô phỏng 27,12%) hoặc tỉ lệ gợi ý được nhân viên xem/sử dụng ở nhóm can thiệp < 50,0% TRONG 7 ngày liên tiếp THÌ Trưởng nhóm CSKH tạm dừng mở rộng, rà soát 20 trace và đào tạo lại nhân viên trong 3 ngày KHÔNG THÌ không được chuyển bước rollout tiếp theo"
+  interim_looks: "chỉ kiểm tra chỉ số an toàn (và chi phí vận hành theo luật dừng; không dừng sớm vì tín hiệu hiệu quả tích cực)"
+  rollback: "Giám đốc vận hành LogiX-VN bật cờ tắt (kill switch) theo staff_id/toàn hệ thống, hiệu lực trong 30 phút; toàn bộ yêu cầu hoàn phí chuyển ngay về luồng nhân viên tự xử lý thủ công chuẩn 6 phút/ca"
+  decision_date: "2027-01-05"     # Giả định cần nhóm xác nhận theo ngày khởi chạy thực tế (sau khi đủ m=299/nhân viên ở bước 0.50 + 7 ngày cửa sổ quan sát reopen)
+  simulated_inputs:
+    - "cps_toan_mau: 4.472 đ/việc [simulated] (A2)"
+    - "cps_noi_dia: 2.696 đ = 0,22x [simulated] và cps_hang_nang: 8.221 đ = 0,69x [simulated] (A3)"
+    - "cps_quoc_te: 22.515 đ = 1,88x [simulated] và cps_doi_tac: 10.215 đ = 0,85x [simulated] (A3)"
+    - "chi_phi_he_thong_k2: 6.901.220 đ [simulated] (B3)"
+    - "cps_xem_lai_100pct: 11.743 đ (9p làm lại) đến 12.415 đ code / 12.414 đ báo cáo (15,3p làm lại) [simulated] (B4)"
+    - "ti_le_mo_lai_7_ngay: 4,25% toàn mẫu (51/1.200) và 3,97% trong phạm vi noi_dia+hang_nang (39/982) [simulated_data]"
+    - "ti_le_sua_bo_goi_y: 27,12% (48/177 ca được xem lại) [simulated_data]"

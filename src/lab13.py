@@ -183,6 +183,57 @@ if __name__ == '__main__':
     cps_15m = tong_15m / thanh_cong_scope
     print(f"Làm lại 15.3m: Tổng = {tong_15m:,.0f} đ | CPS = {cps_15m:,.0f} đ [sim] ({cps_15m/BASELINE:.2f}x)")
 
-    # TODO CP4 · Nhiệm vụ D: cỡ mẫu (dành cho Người 2 tiếp quản sau)
-    #   from statsmodels.stats.proportion import proportion_effectsize
-    #   from statsmodels.stats.power import NormalIndPower
+    # CP4 · Nhiệm vụ D1 & hỗ trợ D3 / E1 (Người 2 tiếp quản)
+    from statistics import NormalDist
+    from statsmodels.stats.proportion import proportion_effectsize
+    from statsmodels.stats.power import NormalIndPower
+
+    print('\n' + '='*50)
+    print('D1 · CỠ MẪU PILOT VÀ HIỆU ỨNG THIẾT KẾ')
+    print('='*50)
+    nd = NormalDist()
+    za = nd.inv_cdf(1 - 0.05 / 2)
+    zb = nd.inv_cdf(0.80)
+
+    def co_mau(p1, p2):
+        pb = (p1 + p2) / 2
+        return math.ceil(
+            (za * math.sqrt(2 * pb * (1 - pb)) + zb * math.sqrt(p1 * (1 - p1) + p2 * (1 - p2))) ** 2
+            / (p2 - p1) ** 2
+        )
+
+    n_mde5 = co_mau(0.70, 0.75)
+    n_mde6 = co_mau(0.70, 0.76)
+    icc = 0.02
+    deff_75 = 1 + (75 - 1) * icc
+    raw_mde5_m75 = math.ceil(n_mde5 * deff_75)
+    staff_needed_mde5 = math.ceil(raw_mde5_m75 / 75)
+    n_eff_20staff_m75 = 20 * 75 / deff_75
+    asymp_20staff = 20 / icc
+    asymp_6depot = 6 / icc
+    m_req_mde6 = math.ceil((n_mde6 * (1 - icc)) / (20 - n_mde6 * icc))
+    deff_mde6 = 1 + (m_req_mde6 - 1) * icc
+    n_eff_mde6 = (20 * m_req_mde6) / deff_mde6
+    power_6pt_at_5pt = NormalIndPower().power(
+        effect_size=proportion_effectsize(0.75, 0.70), nobs1=n_mde6, alpha=0.05
+    )
+
+    print(f'a) Chia theo request (MDE +5đ)      : {n_mde5:,} yêu cầu/nhóm')
+    print(f'b) Theo staff m=75 (DEFF={deff_75:.2f})    : cần {raw_mde5_m75:,} yêu cầu thô/nhóm ({staff_needed_mde5} NV/nhóm > 20 NV sẵn có)')
+    print(f'c) 20 NV/nhóm, m=75                : n_eff={n_eff_20staff_m75:,.0f} (< {n_mde5:,}); trần c/ICC={asymp_20staff:,.0f} (< {n_mde5:,})')
+    print(f'd) 6 depot/nhóm                    : trần c/ICC={asymp_6depot:,.0f} (< {n_mde5:,}, không đủ)')
+    print(f'e) MDE +6đ ({n_mde6}/nhóm), 20 NV/nhóm : m={m_req_mde6} YC/NV ({20*m_req_mde6:,} thô/nhóm, DEFF={deff_mde6:.2f}, n_eff={n_eff_mde6:.2f})')
+    print(f'   Đánh đổi: nếu tác động thật +5đ tại n={n_mde6}, power={power_6pt_at_5pt:.2f}')
+
+    print('\n' + '='*50)
+    print('D3 & E1 · CHỈ SỐ QUAN SÁT TRÊN DỮ LIỆU MÔ PHỎNG')
+    print('='*50)
+    chinh_e1 = ((reqs['dong_trong_24h'] == 1) & (reqs['mo_lai_trong_7_ngay'] == 0)).mean()
+    xem_lai_df = reqs[reqs['duoc_xem_lai'] == 1]
+    sua_bo_e1 = xem_lai_df['quyet_dinh_xem_lai'].isin(['sua', 'bo']).mean()
+    reopen_all = (reqs['mo_lai_trong_7_ngay'] == 1).mean()
+    reopen_scope = (sub_scope['mo_lai_trong_7_ngay'] == 1).mean()
+    print(f'E1 Chính (đóng 24h & không mở lại 7d): {chinh_e1:.2%} ({((reqs["dong_trong_24h"]==1)&(reqs["mo_lai_trong_7_ngay"]==0)).sum()}/{len(reqs)})')
+    print(f'E1 Dùng (sửa/bỏ trên được xem lại)   : {sua_bo_e1:.2%} ({xem_lai_df["quyet_dinh_xem_lai"].isin(["sua","bo"]).sum()}/{len(xem_lai_df)})')
+    print(f'E1 An toàn (mở lại 7d toàn mẫu)      : {reopen_all:.2%} ({(reqs["mo_lai_trong_7_ngay"]==1).sum()}/{len(reqs)})')
+    print(f'D3 An toàn (mở lại 7d noi_dia+nang)  : {reopen_scope:.2%} ({(sub_scope["mo_lai_trong_7_ngay"]==1).sum()}/{len(sub_scope)})')
