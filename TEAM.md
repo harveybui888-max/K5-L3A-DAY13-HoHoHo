@@ -5,7 +5,7 @@
 - Tên nhóm: HoHoHo
 - Lớp: L3A
 - Repo nhóm: `https://github.com/harveybui888-max/K5-L3A-DAY13-HoHoHo` *(lưu ý quy ước đặt tên theo `SUBMISSION.md`: `K5-L3A-DAY13-HoHoHo-LaunchEconomics`)*
-- URL repo, nhánh nộp, commit chốt: `https://github.com/harveybui888-max/K5-L3A-DAY13-HoHoHo.git` · nhánh `feature/person2-cp3-cp5` (chờ merge vào `main` sau khi hoàn tất CP3 & duyệt chéo Gate 2a)
+- URL repo, nhánh nộp, commit chốt: `https://github.com/harveybui888-max/K5-L3A-DAY13-HoHoHo.git` · nhánh `feature/person2-cp3-cp5` (đã hoàn tất CP1–CP5, chờ merge bản cập nhật CP3 vào `main` và hoàn tất duyệt chéo Gate 2a)
 
 ## Thành viên
 
@@ -59,9 +59,9 @@ Mỗi thành viên có báo cáo riêng trong `report/team/`:
 
 - Audit bàn giao CP1–CP2 từ commit `e5353e2`, thiết lập branch `feature/person2-cp3-cp5` và môi trường `src/.venv`.
 - Bổ sung code D1 (`co_mau`, DEFF, `n_eff`, giới hạn tiệm cận, power `0,64`) và thống kê D3/E1 vào `src/lab13.py`.
-- Hoàn thiện `pilot_plan.yaml` (identifiability, rollout 4 → 10 → 20, 3 luật dừng 4 vế), `chi_so.md` (E1 có right censoring 7 ngày, 7 event có `trace_id`, E2 đủ 3 rủi ro), `ho_so_launch_v0.md` (đề xuất `Go có điều kiện`), `bang_loi.md` (khung `PENDING`) và `group_report.md`.
+- Hoàn thiện `pilot_plan.yaml` (identifiability, rollout 4 → 10 → 20, 3 luật dừng 4 vế), `chi_so.md` (E1 có right censoring 7 ngày, 7 event có `trace_id`, E2 đủ 3 rủi ro), `ho_so_launch_v0.md` (đề xuất `Go có điều kiện`), `bang_loi.md` (đối chiếu 20 ca đạt 19/20 = 95%, bảng khắc phục 5 ca) và `group_report.md`.
 
 ### Bằng chứng
 
-- Commit `d59a0be` (`feat: complete person 2 lab13 deliverables`) trên nhánh `feature/person2-cp3-cp5` và commit cập nhật thông tin thành viên tiếp theo.
-- `python lab13.py` chạy exit code `0`; `yaml.safe_load` hợp lệ, không còn `?` ngoài comment; 0 từ `production` trong `report/team/`.
+- Commit `d59a0be`, `8804352` trên nhánh `feature/person2-cp3-cp5`.
+- `python lab13.py` chạy exit code `0`; `yaml.safe_load` hợp lệ, không còn `?` ngoài comment; 0 từ cấm theo quy tắc 5 trong `report/team/`.

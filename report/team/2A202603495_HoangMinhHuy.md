@@ -11,7 +11,7 @@
 ## 2. Phần việc phụ trách
 
 - Audit bàn giao CP1–CP2 của Người 1 (`e5353e2`) và kiểm thử tích hợp trong `src/.venv`.
-- **CP3:** Chuẩn bị khung 20 ca lỗi, định nghĩa 5 nhóm Google PAIR, công thức đồng thuận và khung 5 biện pháp khắc phục trong `report/team/bang_loi.md` (giữ trạng thái `PENDING` chờ hai bộ nhãn độc lập).
+- **CP3:** Hoàn thành gắn nhãn độc lập 20/20 ca lỗi, đối chiếu với Người 1 đạt đồng thuận **19/20 = 95%**, ghi quy tắc phân biệt Ca 8 (`Hệ thống`) và hoàn thiện bảng khắc phục 5 ca (Ca 1, 20, 18, 11, 5) trong `report/team/bang_loi.md`.
 - **CP4:** Tính cỡ mẫu cụm (D1), phân tích 7 khía cạnh identifiability (D2) và hoàn thiện `report/team/pilot_plan.yaml` (D3); bổ sung phần D1 vào `src/lab13.py`.
 - **CP5:** Tính & chuẩn hóa 3 chỉ số E1 (xử lý right censoring 7 ngày), thiết kế 7 event có `trace_id`, hoàn thiện 3 rủi ro kinh tế E2 trong `report/team/chi_so.md`, tổng hợp `report/team/ho_so_launch_v0.md` (E3), `report/team/group_report.md` và `TEAM.md`.
 

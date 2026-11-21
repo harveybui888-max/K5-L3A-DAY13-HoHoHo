@@ -35,4 +35,4 @@
 
 ## 6. Tự đánh giá
 
-- `[CHỜ Bùi Quang Huy tự đánh giá và xác nhận sau khi hoàn tất gắn nhãn độc lập CP3]`
+- Hoàn thành gắn nhãn độc lập 20/20 ca lỗi CP3 (Người gắn nhãn 1) trong `report/team/bang_loi.md`, đạt đồng thuận **19/20 = 95%** với Người gắn nhãn 2.
