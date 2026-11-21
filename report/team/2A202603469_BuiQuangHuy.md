@@ -31,7 +31,16 @@
 
 ## 5. Công cụ AI đã dùng
 
-- `[CHỜ Bùi Quang Huy điền công cụ AI đã sử dụng và cách tự kiểm tra kết quả CP1–CP2]`
+- **Công cụ sử dụng:** Trợ lý AI coding agent (Antigravity / Gemini 3.8 Flash).
+- **Mục đích sử dụng:**
+  - Hỗ trợ triển khai và tối ưu các hàm toán học xác suất chạy lại ở A1 (`so_lan_chay_ky_vong`, `ti_le_thanh_cong`, `he_so_chi_phi_moi_viec_thanh_cong`).
+  - Hỗ trợ xây dựng hàm `mo_hinh()` linh hoạt với các tham số giá (`gia_vao`, `gia_ra`, `gia_tool`, `luong_phut`), hệ số xem lại/làm lại và giới hạn `max_lan_chay` để tự động hoá toàn bộ 9 kịch bản độ nhạy B1, kịch bản kép B2, đánh giá toàn hệ thống B3 và xem lại 100% B4.
+  - Hỗ trợ viết script xử lý và kiểm tra dữ liệu bằng `pandas` (chú ý cờ `keep_default_na=False`, logic lọc attempt, gán chuyển nhân viên khi vượt giới hạn).
+- **Cách tự kiểm tra và kiểm chứng kết quả:**
+  - **Kiểm chứng tiên nghiệm (Unit tests A1):** Chạy hàm kiểm tra đáp án biết trước `kiem_tra_dap_an_biet_truoc()` với 3 phép thử ($1{,}20$ lần khi $k=2$; $1{,}25$ lần khi $k=\text{None}$; $1{,}25$ lần giá khi $k=3$ tại $p=0{,}8$), kết quả đạt $100\%$ (`assert` sai số $< 10^{-9}$).
+  - **Tính toán đối chiếu bằng tay:** Tự tính tay công thức lý thuyết ($1/p = 1/0{,}8 = 1{,}25$), kiểm tra tính chất cộng tuyến tính ở kịch bản kép B2 ($+5{,}6\% + 40{,}7\% = +46{,}3\%$).
+  - **Đối chiếu chéo với slide đáp án chuẩn:** Chạy `python src/lab13.py` và so sánh trực tiếp với tài liệu `docs/Lab13_Huong_dan_chi_tiet_buoi_chieu.md`: Mọi số liệu tại A2 (Token `245.585 đ`, Tool `84.000 đ`, Xem lại `1.780.000 đ`, Làm lại `2.264.000 đ`, Tổng `4.373.585 đ`, Thành công `978`, CPS `4.472 đ`), A3 (`noi_dia 2.696 đ`, `hang_nang 8.221 đ`, `quoc_te 22.515 đ`, `doi_tac 10.215 đ`), A4, B1 (9 kịch bản), B3 (k=2 rẻ nhất `6.901.220 đ`) đều khớp chính xác $100\%$ (độ lệch $0\% < 2\%$ cho phép).
+  - **Kiểm tra kỷ luật báo cáo:** Rà soát thủ công để đảm bảo toàn bộ số liệu phát sinh từ cột giả lập đều có nhãn `simulated`, câu trả lời $\le 3$ dòng và chứa số liệu, tuân thủ nghiêm ngặt quy tắc 5 của lab (chỉ đánh giá pilot).
 
 ## 6. Tự đánh giá
 

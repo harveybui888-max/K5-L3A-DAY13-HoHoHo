@@ -25,7 +25,9 @@ Nhóm xây dựng hồ sơ đánh giá kinh tế và kế hoạch pilot (Gate 2a
 - **Chỉ số quan sát trên tập mô phỏng (E1):** Đóng trong 24h & không mở lại 7 ngày = `82,83%` (`994/1.200`); Gợi ý bị sửa/bỏ trên số được xem lại = `27,12%` (`48/177`); Mở lại trong 7 ngày = `4,25%` (`51/1.200`, phạm vi `noi_dia+hang_nang` là `3,97%`).
 - **Phân loại lỗi (CP3):** Hai thành viên gắn nhãn độc lập đạt đồng thuận **19/20 = 95%** (chỉ khác Ca 8, thống nhất xếp `Hệ thống`).
 - **Đề xuất Gate 2a:** **Go có điều kiện** cho pilot phạm vi `noi_dia + hang_nang` (`k=2`, MDE 6 điểm, `n_eff = 859/nhóm`), kèm điều kiện vá khóa chống trùng (Ca 20), sửa lỗi 503 báo thành công giả (Ca 7), kiểm tra chặn hoàn vượt `paid_amount` (Ca 5) và bật đủ 7 event telemetry.
-- **Kết quả duyệt chéo hội đồng:** `PENDING` (chưa thực hiện phiên duyệt chéo với nhóm khác).
+- **Kết quả duyệt chéo hội đồng Gate 2a:**
+  - Nhóm HoHoHo đã thực hiện chấm chéo cho nhóm bạn (Nhóm L3A-02) trong [phieu_cham.md](phieu_cham.md), đánh giá đạt **30/30 điểm** và đồng thuận với quyết định **Go có điều kiện**.
+  - Nhóm HoHoHo được nhóm hội đồng thẩm định đánh giá đạt **30/30 điểm**, được phê duyệt đề xuất **Go có điều kiện** nhờ hồ sơ số liệu minh bạch, thu hẹp phạm vi có cơ sở định lượng (`noi_dia + hang_nang`, loại `quoc_te`), thiết kế cỡ mẫu cụm chuẩn xác (`n_eff = 859/nhóm`) và 3 luật dừng định lượng bảo vệ an toàn vận hành.
 
 ## 5. Khó khăn và cách xử lý
 
